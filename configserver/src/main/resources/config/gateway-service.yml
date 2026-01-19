@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: product-service
+              uri: lb://PRODUCT-SERVICE
+              predicates:
+                - Path=/api/products/**
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/api/users/**
+            - id: order-service-orders
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/api/orders/**
+            - id: order-service-cart
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/api/cart/**
+
+
+
+server:
+  port: 7070
