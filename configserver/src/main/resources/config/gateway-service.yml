@@ -1,27 +1,41 @@
-spring:
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: product-service
-              uri: lb://PRODUCT-SERVICE
-              predicates:
-                - Path=/api/products/**
-            - id: user-service
-              uri: lb://USER-SERVICE
-              predicates:
-                - Path=/api/users/**
-            - id: order-service-orders
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/orders/**
-            - id: order-service-cart
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/cart/**
-
-
-
 server:
   port: 7070
+
+spring:
+  application:
+    name: GATEWAY-SERVICE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+tracing:
+  sampling:
+    probability: 1.0
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      ecomBreaker:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+  timelimiter:
+    instances:
+      ecomBreaker:
+        timeoutDuration: 2s
+        cancelRunningFuture: true

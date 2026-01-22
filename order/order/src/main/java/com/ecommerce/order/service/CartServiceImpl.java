@@ -9,6 +9,7 @@ import com.ecommerce.order.model.CartItems;
 
 import com.ecommerce.order.repository.CartItemRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,15 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserServiceClient userServiceClient;
 
+    int Attempt = 0;
+
 
     @Override
     @Transactional
-    @CircuitBreaker(name = "productService")
+   // @CircuitBreaker(name = "productService", fallbackMethod = "addToCartFallBack")
+    @Retry(name = "retryBreaker", fallbackMethod = "addToCartFallBack")
     public boolean addtoCart(String userId, CartItemRequest cartItemRequest) {
+        System.out.println("Retry Attempt"+ ++Attempt);
 
         // 1️⃣ Get product details
         ProductResponse productResponse =
@@ -71,6 +76,12 @@ public class CartServiceImpl implements CartService {
         }
 
         return true;
+    }
+
+    public  boolean addToCartFallBack(String userId, CartItemRequest cartItemRequest,
+                                       Exception exception ){
+        exception.printStackTrace();
+        return false;
     }
 
     @Override
