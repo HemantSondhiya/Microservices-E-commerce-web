@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: configserver
+  profiles:
+    active: native
+  rabbitmq:
+    addresses: amqps://qlfectxi:3Ctfrb9BQjJBodGaxfYp5V7zCrOWrZp-@puffin.rmq2.cloudamqp.com/qlfectxi
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///D:\Microservices Ecommerce\configserver\src\main\resources\config
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

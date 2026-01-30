@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql:8.1
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 628056@Hk   # root password
+      MYSQL_DATABASE: ecommerce         # database name
+      MYSQL_USER: ecommerce_user        # username
+      MYSQL_PASSWORD: 628056@Hk         # user password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 628056@Hk
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mysql_data:
+  redis_data:

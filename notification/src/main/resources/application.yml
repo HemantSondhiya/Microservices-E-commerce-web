@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: notification
+
+  rabbitmq:
+    addresses: amqps://qlfectxi:3Ctfrb9BQjJBodGaxfYp5V7zCrOWrZp-@puffin.rmq2.cloudamqp.com/qlfectxi
+
+server:
+  port: 9094
+
+rabbitmq:
+  exchange:
+    name: order.exchange
+  queue:
+    name: order.queue
+  routing:
+    key: order.tracking

@@ -1,0 +1,39 @@
+server:
+  port: 9091
+
+spring:
+  application:
+    name: user-service
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
+  rabbitmq:
+    addresses: amqps://qlfectxi:3Ctfrb9BQjJBodGaxfYp5V7zCrOWrZp-@puffin.rmq2.cloudamqp.com/qlfectxi
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+
+eureka:
+  instance:
+    prefer-ip-address: true   # <<< crucial!
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB
+      max-history: 7
